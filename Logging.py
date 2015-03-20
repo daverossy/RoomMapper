@@ -4,7 +4,8 @@ __author__ = 'David Rossiter'
 
 import csv
 
-def logger(Timestamp,FSD,RSD,LSD,BSD,Direction,StraightAmount):
+
+def logger(timestamp, fsd, rsd, lsd, bsd, direction, movement_value):
     with open('log.csv', 'w', newline='') as csvfile:
-    logWriter = csv.writer(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-    logWriter.writerow(Timestamp,FSD,RSD,LSD,BSD,Direction,StraightAmount)
+        log_writer = csv.writer(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        log_writer.writerow(timestamp, fsd, rsd, lsd, bsd, direction, movement_value)

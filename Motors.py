@@ -4,75 +4,77 @@ __author__ = 'David Rossiter'
 import time
 import RPi.GPIO as GPIO
 
-def initialisegpio ():
-    # Use BCM GPIO references
+
+def initialise_gpio():
+    # Use BOARD GPIO references
     # instead of physical pin numbers
-    GPIO.setmode(GPIO.BCM)
+    GPIO.setmode(GPIO.BOARD)
 
     # Define GPIO signals to use
-    # Pins 18,22,24,26
-    # GPIO24,GPIO25,GPIO8,GPIO7
-    StepPins = [24,25,8,7]
+    # Left Stepper Motor Pins 7,11,12,13
+    # Right Stepper Motor Pins 15,16,18,22
+    step_pins = [7, 11, 12, 13]
 
     # Set all pins as output
-    for pin in StepPins:
-      print "Setup pins"
-      GPIO.setup(pin,GPIO.OUT)
-      GPIO.output(pin, False)
+    for pin in step_pins:
+        print "Setup pins"
+        GPIO.setup(pin, GPIO.OUT)
+        GPIO.output(pin, False)
 
     # Define some settings
-    StepCounter = 0
-    WaitTime = 0.5
+    step_counter = 0
+    wait_time = 0.5
 
     # Define advanced sequence
-    # as shown in manufacturers datasheet
-    StepCount2 = 8
-    Seq2 = []
-    Seq2 = range(0, StepCount2)
-    Seq2[0] = [1,0,0,0]
-    Seq2[1] = [1,1,0,0]
-    Seq2[2] = [0,1,0,0]
-    Seq2[3] = [0,1,1,0]
-    Seq2[4] = [0,0,1,0]
-    Seq2[5] = [0,0,1,1]
-    Seq2[6] = [0,0,0,1]
-    Seq2[7] = [1,0,0,1]
+    # as shown in manufacturers data sheet
+    step_count_2 = 8
+    seq_2 = []
+    seq_2 = range(0, step_count_2)
+    seq_2[0] = [1, 0, 0, 0]
+    seq_2[1] = [1, 1, 0, 0]
+    seq_2[2] = [0, 1, 0, 0]
+    seq_2[3] = [0, 1, 1, 0]
+    seq_2[4] = [0, 0, 1, 0]
+    seq_2[5] = [0, 0, 1, 1]
+    seq_2[6] = [0, 0, 0, 1]
+    seq_2[7] = [1, 0, 0, 1]
 
     # Choose a sequence to use
-    Seq = Seq2
-    StepCount = StepCount2
+    seq = seq_2
+    step_count = step_count_2
 
     # Start main loop
-    while 1==1:
-
-      for pin in range(0, 4):
-        xpin = StepPins[pin]
-        if Seq[StepCounter][pin]!=0:
-          print " Step %i Enable %i" %(StepCounter,xpin)
-          GPIO.output(xpin, True)
+    while 1 == 1:
+        for pin in range(0, 4):
+            xpin = step_pins[pin]
+            if seq[step_counter][pin] != 0:
+                print " Step %i Enable %i" % (step_counter, xpin)
+                GPIO.output(xpin, True)
         else:
-          GPIO.output(xpin, False)
+            GPIO.output(xpin, False)
 
-      StepCounter += 1
+    step_counter += 1
 
-      # If we reach the end of the sequence
-      # start again
-      if (StepCounter==StepCount):
-        StepCounter = 0
-      if (StepCounter<0):
-        StepCounter = StepCount
+    # If we reach the end of the sequence
+    # start again
+    if step_counter == step_count:
+        step_counter = 0
+    if step_counter < 0:
+        step_counter = step_count
 
-      # Wait before moving on
-      time.sleep(WaitTime)
+    # Wait before moving on
+    time.sleep(wait_time)
 
-def move(direction,movement):
+    GPIO.cleanup()
+
+def move(direction, movement):
     if direction == "Forward":
         # Move stepper motor forward for value of movement
-    elif Sensor == "Right":
+    elif direction == "Right":
         # Move stepper motor right for value of movement
-    elif Sensor == "Left":
+    elif direction == "Left":
         # Move stepper motor left for value of movement
-    elif Sensor == "Reverse":
+    elif direction == "Reverse":
         # Move stepper motor in reverse for value of movement
     else:
         # Print error, selection of sensor location parameter is not valid
