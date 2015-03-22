@@ -1,11 +1,22 @@
 __author__ = 'David Rossiter'
 
-# Easiest to append each log record to a csv file, a database could be used
+# Import required modules
+import sqlite3
 
-import csv
 
+def logger(session_id, timestamp, fsd, rsd, lsd, bsd, direction, movement_value):
+    # Connect to SQLite database or create database if not already existing
+    conn = sqlite3.connect('mapping.db')
 
-def logger(timestamp, fsd, rsd, lsd, bsd, direction, movement_value):
-    with open('log.csv', 'w', newline='') as csvfile:
-        log_writer = csv.writer(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        log_writer.writerow(timestamp, fsd, rsd, lsd, bsd, direction, movement_value)
+    # Connection
+    c = conn.cursor()
+
+    # Insert a row of data
+    c.execute('''INSERT INTO mapping (session_id, timestamp, fsd, rsd, lsd, bsd, direction, movement_value) VALUES (?, ?, ?, ?, ?, ?, ?)''', (session_id, timestamp, fsd, rsd, lsd, bsd, direction, movement_value))
+
+    # Commit changes
+    conn.commit()
+
+    # Close connection
+    conn.close()
+
