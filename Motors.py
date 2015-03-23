@@ -181,7 +181,7 @@ def move(direction, movement):
         # Set to -1 or -2 for anti-clockwise
 
         # Read wait time from command line
-        if len(sys.argv)>1:
+        if len(sys.argv) > 1:
             waittime = int(sys.argv[1])/float(1000)
         else:
             waittime = 0.004

@@ -18,7 +18,7 @@ def database():
 
     # Create table if not already existing
     c.execute('''CREATE TABLE IF NOT EXISTS mapping
-                 (session_id integer, timestamp text, orientation text, location_x integer, location_y integer, fsd_location_x integer, fsd_location_y integer, rsd_location_x integer, rsd_location_y integer, lsd_location_x integer, lsd_location_y integer, bsd_location_x integer, bsd_location_y integer, direction text, movement_value integer)''')
+                 (session_id integer, timestamp text, orientation integer, location_x integer, location_y integer, fsd_location_x integer, fsd_location_y integer, rsd_location_x integer, rsd_location_y integer, lsd_location_x integer, lsd_location_y integer, bsd_location_x integer, bsd_location_y integer, direction text, movement_value integer)''')
 
     # Commit changes
     conn.commit()
@@ -45,7 +45,7 @@ def session_id():
     if session == null:
         session = 1
     else:
-        session = session + 1
+        session += 1
 
     return session
 
@@ -74,14 +74,14 @@ def algorithm(session_id):
         timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
 
         if fsd > min_distance:
-            if orientation == "0":
+            if orientation == 0:
                 # Set location co-ordinates to y - 1
                 location_y += 1
-            elif orientation == "90":
+            elif orientation == 90:
                 location_x += 1
-            elif orientation == "180":
+            elif orientation == 180:
                 location_y -= 1
-            elif orientation == "270":
+            elif orientation == 270:
                 location_x -= 1
             else:
                 print "Orientation error!"
@@ -98,8 +98,17 @@ def algorithm(session_id):
             if rsd > lsd:
                 # Don't change location, just change orientation for next movement
 
-                # Set orientation to add 90 degrees, divide by 360 and get remainder then add 90
-                orientation = (orientation % 360) + 90
+                # Set orientation relative to current orientation
+                if orientation == 0:
+                    orientation = 90
+                elif orientation == 90:
+                    orientation = 180
+                elif orientation == 180:
+                    orientation = 270
+                elif orientation == 270:
+                    orientation = 0
+                else:
+                    print "Error in orientation setting"
                 # Set LED matrix to right arrow
                 led("Right")
                 # Log sensor readings, movement decision, movement distance and timestamp
@@ -110,8 +119,17 @@ def algorithm(session_id):
             else:
                 # Don't change location, just change orientation for next movement
 
-                # Set orientation to add 270 degrees, divide by 360 and get remainder then add 270
-                orientation = (orientation % 360) + 270
+                # Set orientation relative to current orientation
+                if orientation == 0:
+                    orientation = 270
+                elif orientation == 90:
+                    orientation = 0
+                elif orientation == 180:
+                    orientation = 90
+                elif orientation == 270:
+                    orientation = 180
+                else:
+                    print "Error in orientation setting"
                 # Set LED matrix to left arrow
                 led("Left")
                 # Log sensor readings, movement decision, movement distance and timestamp
@@ -120,14 +138,14 @@ def algorithm(session_id):
                 move("Left", rotation_amount)
 
         elif bsd > min_distance:
-            if orientation == "0":
+            if orientation == 0:
                 # Set location co-ordinates to y - 1
                 location_y -= 1
-            elif orientation == "90":
+            elif orientation == 90:
                 location_x -= 1
-            elif orientation == "180":
+            elif orientation == 180:
                 location_y += 1
-            elif orientation == "270":
+            elif orientation == 270:
                 location_x += 1
             else:
                 print "Orientation error!"
@@ -144,12 +162,13 @@ def algorithm(session_id):
             # Set LED matrix to exclaimation mark
             led("Halt")
             # Log data about point where robot got suck
-            logger(session_id, timestamp, orientation, location_x, location_y, fsd, rsd, lsd, bsd, "Forward", straight_amount)
+            logger(session_id, timestamp, orientation, location_x, location_y, fsd, rsd, lsd, bsd, "Halt", straight_amount)
 
 
 # Run database preparation
 database()
 # Get session id
-session_id = session_id()
+# session_id = session_id()
+session_id = 1
 # Run algorithm
 algorithm(session_id)
