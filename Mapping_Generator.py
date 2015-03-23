@@ -1,9 +1,12 @@
 __author__ = 'David Rossiter'
 
+# Requires matlibplot to be installed
 # Import required modules
 import sqlite3
 import numpy as np
 import matplotlib.pyplot as plt
+import time
+import datetime
 
 
 def mapping_generator():
@@ -25,7 +28,7 @@ def mapping_generator():
 
 
 def scatter_plt():
-    # the random data
+    # Insert array of all points from database required in here!
     x = [0, 0, 0, 0, 0, 1, 1, 1, 2]
     y = [1, 2, 3, 4, 5, 5, 6, 7, 7]
 
@@ -51,9 +54,15 @@ def scatter_plt():
     axScatter.set_xlim((-1, lim))
     axScatter.set_ylim((-1, lim))
 
-    plt.savefig('foo.png')
-    plt.savefig('foo.pdf')
+    # Generate timestamp
+    ts = time.time()
+    timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H-%M-%S')
 
+    # Export as PDF or PNG
+    # plt.savefig(str(timestamp) + '.png')
+    plt.savefig(str(timestamp) + '.pdf')
+
+    # Open in viewer
     plt.show()
 
 scatter_plt()
