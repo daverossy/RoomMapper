@@ -9,7 +9,7 @@ import time
 import datetime
 
 
-def mapping_generator():
+def data():
     # Connect to SQLite database or create database if not already existing
     conn = sqlite3.connect('mapping.db')
 
@@ -27,7 +27,7 @@ def mapping_generator():
     conn.close()
 
 
-def scatter_plt():
+def scatter_plot():
     # Insert array of all points from database required in here!
     x = [0, 0, 0, 0, 0, 1, 1, 1, 2]
     y = [1, 2, 3, 4, 5, 5, 6, 7, 7]

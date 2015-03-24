@@ -28,24 +28,8 @@ def database():
 
 
 def session_id():
-    # Connect to SQLite database or create database if not already existing
-    conn = sqlite3.connect('mapping.db')
-    # Connection
-    c = conn.cursor()
-    # Insert a row of data
-    c.execute("SELECT max(session_id) FROM mapping")
-
-    session = (c.fetchall())
-
-    # Commit changes
-    conn.commit()
-    # Close connection
-    conn.close()
-
-    if session == null:
-        session = 1
-    else:
-        session += 1
+    ts = time.time()
+    session = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
 
     return session
 
@@ -168,7 +152,6 @@ def algorithm(session_id):
 # Run database preparation
 database()
 # Get session id
-# session_id = session_id()
-session_id = 1
+session_id = session_id()
 # Run algorithm
 algorithm(session_id)

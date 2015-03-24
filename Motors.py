@@ -52,7 +52,7 @@ def move(direction, movement):
         stepcounter = 0
 
         # Start main loop
-        for x in range(0, 1951):
+        for x in range(0, 551):
             for pin in range(0, 4):
                 l_pin = forwards_left_step_pins[pin]
                 r_pin = forwards_right_step_pins[pin]
@@ -190,7 +190,7 @@ def move(direction, movement):
         stepcounter = 0
 
         # Start main loop
-        for x in range(0, 1951):
+        for x in range(0, 551):
             for pin in range(0, 4):
                 l_pin = reverse_left_step_pins[pin]
                 r_pin = reverse_right_step_pins[pin]
