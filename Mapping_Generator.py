@@ -25,13 +25,13 @@ def data(session_id):
     c = conn.cursor()
 
     # Select all records for the current session id
-    c.execute("SELECT * FROM mapping WHERE session_id == '&s'" % session_id)
+    c.execute("SELECT * FROM mapping WHERE session_id = ?", session_id)
 
-    c.execute("select 1 as a")
-    print c.fetchone()["a"]
+    print c.fetchone()['timestamp']
 
     # Close connection
     conn.close()
+
 
 
 def scatter_plot(session_id):
@@ -76,4 +76,4 @@ def scatter_plot(session_id):
     # Open in viewer
     plt.show()
 
-scatter_plot("test")
+data("1")
