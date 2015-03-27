@@ -68,9 +68,9 @@ def scatter_plot(session_id):
     axScatter.scatter(lsd_x, lsd_y)
     axScatter.scatter(bsd_x, bsd_y)
 
+    # Set axis limits
     x_limit = max(loc_x) + 50
     y_limit = max(loc_y) + 50
-    # Set axis limits
     axScatter.set_xlim(((x_limit * -1), x_limit))
     axScatter.set_ylim(((y_limit * -1), y_limit))
 
@@ -84,5 +84,3 @@ def scatter_plot(session_id):
 
     # Open in viewer for debugging
     # plt.show()
-
-scatter_plot("1")
