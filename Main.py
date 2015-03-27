@@ -6,6 +6,7 @@ from Logging import logger
 from Sensors import sonar_reading
 from Motors import move
 from LED_System import led
+from Mapping_Generator import scatter_plot
 import sqlite3
 
 
@@ -18,7 +19,7 @@ def database():
 
     # Create table if not already existing
     c.execute('''CREATE TABLE IF NOT EXISTS mapping
-                 (session_id integer, timestamp text, orientation integer, location_x integer, location_y integer, fsd_location_x integer, fsd_location_y integer, rsd_location_x integer, rsd_location_y integer, lsd_location_x integer, lsd_location_y integer, bsd_location_x integer, bsd_location_y integer, direction text, movement_value integer)''')
+                 (session_id text, timestamp text, orientation integer, location_x integer, location_y integer, fsd_location_x integer, fsd_location_y integer, rsd_location_x integer, rsd_location_y integer, lsd_location_x integer, lsd_location_y integer, bsd_location_x integer, bsd_location_y integer, direction text, movement_value integer)''')
 
     # Commit changes
     conn.commit()
@@ -155,3 +156,4 @@ database()
 session_id = session_id()
 # Run algorithm
 algorithm(session_id)
+scatter_plot(session_id)

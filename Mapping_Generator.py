@@ -9,26 +9,36 @@ import time
 import datetime
 
 
-def data():
+def dict_factory(cursor, row):
+    d = {}
+    for idx, col in enumerate(cursor.description):
+        d[col[0]] = row[idx]
+    return d
+
+
+def data(session_id):
     # Connect to SQLite database or create database if not already existing
     conn = sqlite3.connect('mapping.db')
 
     # Connection
+    conn.row_factory = dict_factory
     c = conn.cursor()
 
-    # Insert a row of data
-    c.execute("SELECT * FROM mapping")
-    print(c.fetchall())
+    # Select all records for the current session id
+    c.execute("SELECT * FROM mapping WHERE session_id == '&s'" % session_id)
 
-    # Commit changes
-    conn.commit()
+    c.execute("select 1 as a")
+    print c.fetchone()["a"]
 
     # Close connection
     conn.close()
 
 
-def scatter_plot():
-    # Insert array of all points from database required in here!
+def scatter_plot(session_id):
+    # Get graph data from database for current session id
+    #x, y = data(session_id)
+
+    # Insert tuple of all points from database required in here!
     x = [0, 0, 0, 0, 0, 1, 1, 1, 2]
     y = [1, 2, 3, 4, 5, 5, 6, 7, 7]
 
@@ -46,6 +56,7 @@ def scatter_plot():
     # the scatter plot:
     axScatter.scatter(x, y)
 
+
     # now determine nice limits by hand:
     binwidth = 0.25
     xymax = np.max( [np.max(np.fabs(x)), np.max(np.fabs(y))] )
@@ -60,9 +71,9 @@ def scatter_plot():
 
     # Export as PDF or PNG
     # plt.savefig(str(timestamp) + '.png')
-    plt.savefig(str(timestamp) + '.pdf')
+    # plt.savefig(str(timestamp) + '.pdf')
 
     # Open in viewer
     plt.show()
 
-scatter_plt()
+scatter_plot("test")
