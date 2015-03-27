@@ -42,21 +42,13 @@ def data(session_id):
 
     return loc_x, loc_y, fsd_x, fsd_y, rsd_x, rsd_y, lsd_x, lsd_y, bsd_x, bsd_y
 
-
-
-
     # Close connection
     conn.close()
 
 
-
 def scatter_plot(session_id):
     # Get graph data from database for current session id
-    #x, y = data(session_id)
-
-    # Insert tuple of all points from database required in here!
-    x = [0, 0, 0, 0, 0, 1, 1, 1, 2]
-    y = [1, 2, 3, 4, 5, 5, 6, 7, 7]
+    loc_x, loc_y, fsd_x, fsd_y, rsd_x, rsd_y, lsd_x, lsd_y, bsd_x, bsd_y = data(session_id)
 
     # definitions for the axes
     left, width = 0.1, 0.8
@@ -65,31 +57,32 @@ def scatter_plot(session_id):
     rect_scatter = [left, bottom, width, height]
 
     # start with a rectangular Figure
-    plt.figure(1, figsize=(8, 8))
+    plt.figure(1, figsize=(20, 20))
 
     axScatter = plt.axes(rect_scatter)
 
     # the scatter plot:
-    axScatter.scatter(x, y)
+    axScatter.scatter(loc_x, loc_y)
+    axScatter.scatter(fsd_x, fsd_y)
+    axScatter.scatter(rsd_x, rsd_y)
+    axScatter.scatter(lsd_x, lsd_y)
+    axScatter.scatter(bsd_x, bsd_y)
 
-
-    # now determine nice limits by hand:
-    binwidth = 0.25
-    xymax = np.max( [np.max(np.fabs(x)), np.max(np.fabs(y))] )
-    lim = (int(xymax/binwidth) + 1) * binwidth
-
-    axScatter.set_xlim((-1, lim))
-    axScatter.set_ylim((-1, lim))
+    x_limit = max(loc_x) + 50
+    y_limit = max(loc_y) + 50
+    # Set axis limits
+    axScatter.set_xlim(((x_limit * -1), x_limit))
+    axScatter.set_ylim(((y_limit * -1), y_limit))
 
     # Generate timestamp
     ts = time.time()
     timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H-%M-%S')
 
-    # Export as PDF or PNG
-    # plt.savefig(str(timestamp) + '.png')
-    # plt.savefig(str(timestamp) + '.pdf')
+    # Export as PDF and PNG
+    plt.savefig(str(timestamp) + '.png')
+    plt.savefig(str(timestamp) + '.pdf')
 
-    # Open in viewer
-    plt.show()
+    # Open in viewer for debugging
+    # plt.show()
 
-data("1")
+scatter_plot("1")
