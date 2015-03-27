@@ -27,7 +27,23 @@ def data(session_id):
     # Select all records for the current session id
     c.execute("SELECT * FROM mapping WHERE session_id = ?", session_id)
 
-    print c.fetchone()['timestamp']
+    output = c.fetchall()
+
+    loc_x = [x['location_x'] for x in output]
+    loc_y = [x['location_x'] for x in output]
+    fsd_x = [x['fsd_location_x'] for x in output]
+    fsd_y = [x['fsd_location_y'] for x in output]
+    rsd_x = [x['rsd_location_x'] for x in output]
+    rsd_y = [x['rsd_location_y'] for x in output]
+    lsd_x = [x['lsd_location_x'] for x in output]
+    lsd_y = [x['lsd_location_y'] for x in output]
+    bsd_x = [x['bsd_location_x'] for x in output]
+    bsd_y = [x['bsd_location_y'] for x in output]
+
+    return loc_x, loc_y, fsd_x, fsd_y, rsd_x, rsd_y, lsd_x, lsd_y, bsd_x, bsd_y
+
+
+
 
     # Close connection
     conn.close()
