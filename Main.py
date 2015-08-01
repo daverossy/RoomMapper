@@ -6,7 +6,6 @@ from Logging import logger
 from Sensors import sonar_reading
 from Motors import move
 from LED_System import led
-from Mapping_Generator import scatter_plot
 import sqlite3
 
 
@@ -40,11 +39,14 @@ def algorithm(session_id):
 
     # Initialise variables
     min_distance = 15
+    min_forward_side_distance = 5
+    min_side_distance = 5
     rotation_amount = 2
     straight_amount = 2
     location_x = 0
     location_y = 0
     orientation = 0
+    location_increment = 2.1
 
     # Run program while loop, will need a stop and start mechanism
     while True:
@@ -58,16 +60,15 @@ def algorithm(session_id):
         ts = time.time()
         timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
 
-        if fsd > min_distance:
+        if (fsd > min_distance) and ((rsd and lsd) > min_forward_side_distance):
             if orientation == 0:
-                # Set location co-ordinates to y - 1
-                location_y += 1
+                location_y += location_increment
             elif orientation == 90:
-                location_x += 1
+                location_x += location_increment
             elif orientation == 180:
-                location_y -= 1
+                location_y -= location_increment
             elif orientation == 270:
-                location_x -= 1
+                location_x -= location_increment
             else:
                 print "Orientation error!"
             # Do nothing to orientation
@@ -79,7 +80,7 @@ def algorithm(session_id):
             # Call move forwards method and tell the motors to move forwards
             move("Forward", straight_amount)
 
-        elif (rsd or lsd) > min_distance:
+        elif (rsd or lsd) > min_side_distance:
             if rsd > lsd:
                 # Don't change location, just change orientation for next movement
 
@@ -125,13 +126,13 @@ def algorithm(session_id):
         elif bsd > min_distance:
             if orientation == 0:
                 # Set location co-ordinates to y - 1
-                location_y -= 1
+                location_y -= location_increment
             elif orientation == 90:
-                location_x -= 1
+                location_x -= location_increment
             elif orientation == 180:
-                location_y += 1
+                location_y += location_increment
             elif orientation == 270:
-                location_x += 1
+                location_x += location_increment
             else:
                 print "Orientation error!"
             # Do nothing to orientation
@@ -156,4 +157,3 @@ database()
 session_id = session_id()
 # Run algorithm
 algorithm(session_id)
-scatter_plot(session_id)

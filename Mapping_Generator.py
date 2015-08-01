@@ -25,12 +25,12 @@ def data(session_id):
     c = conn.cursor()
 
     # Select all records for the current session id
-    c.execute("SELECT * FROM mapping WHERE session_id = ?", session_id)
+    c.execute("SELECT * FROM mapping WHERE session_id = '2015-04-25 15:14:47'")
 
     output = c.fetchall()
 
     loc_x = [x['location_x'] for x in output]
-    loc_y = [x['location_x'] for x in output]
+    loc_y = [x['location_y'] for x in output]
     fsd_x = [x['fsd_location_x'] for x in output]
     fsd_y = [x['fsd_location_y'] for x in output]
     rsd_x = [x['rsd_location_x'] for x in output]
@@ -62,15 +62,15 @@ def scatter_plot(session_id):
     axScatter = plt.axes(rect_scatter)
 
     # the scatter plot:
-    axScatter.scatter(loc_x, loc_y)
+
     axScatter.scatter(fsd_x, fsd_y)
     axScatter.scatter(rsd_x, rsd_y)
     axScatter.scatter(lsd_x, lsd_y)
     axScatter.scatter(bsd_x, bsd_y)
 
     # Set axis limits
-    x_limit = max(loc_x) + 50
-    y_limit = max(loc_y) + 50
+    x_limit = max(loc_x) + 150
+    y_limit = max(loc_y) + 150
     axScatter.set_xlim(((x_limit * -1), x_limit))
     axScatter.set_ylim(((y_limit * -1), y_limit))
 
@@ -79,8 +79,10 @@ def scatter_plot(session_id):
     timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H-%M-%S')
 
     # Export as PDF and PNG
-    plt.savefig(str(timestamp) + '.png')
     plt.savefig(str(timestamp) + '.pdf')
 
     # Open in viewer for debugging
     # plt.show()
+
+
+scatter_plot("")
